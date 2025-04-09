@@ -528,6 +528,7 @@ body {
     z-index: 2;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
     transition: 0.3s ease;
+    cursor: pointer;
 }
 
 .services-icon {
@@ -567,6 +568,47 @@ body {
     z-index: 1;
 }
 
+.services-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-left {
+    animation: fadeInLeft 0.8s ease forwards;
+}
+
+.animate-right {
+    animation: fadeInRight 0.8s ease forwards;
+}
+
+.services-card-wrapper {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .services-cards {
@@ -602,20 +644,15 @@ body {
 .honeymoon-image img {
     width: 100%;
     max-width: 500px;
-    animation: slideLeft 1s ease forwards;
     opacity: 0;
+    transform: translateX(-50px);
+    transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-@keyframes slideLeft {
-    from {
-        transform: translateX(-50px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+/* Triggered on scroll */
+.honeymoon-image.animate-left img {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .honeymoon-content {
@@ -734,6 +771,9 @@ body {
 .booking-cards-wrapper {
     position: relative;
     width: 400px;
+    transform: translateX(60px);
+    opacity: 0;
+    transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
 .background-image {
@@ -873,6 +913,12 @@ body {
     width: 40%;
     height: 100%;
     background: #ff6f61;
+}
+
+/* Triggered on scroll */
+.booking-cards-wrapper.animate-right {
+    transform: translateX(0);
+    opacity: 1;
 }
 
 /* Responsive Design: On smaller screens */
@@ -1055,6 +1101,9 @@ body {
     width: 160px;
     height: 160px;
     flex: 0 0 auto;
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: all 0.6s ease;
 }
 
 .promo-card-v2 img {
@@ -1101,6 +1150,21 @@ body {
 
 }
 
+.promo-card-v2.animate-left {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.promo-image-v2 {
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.6s ease;
+}
+
+.promo-image-v2.animate-right {
+    opacity: 1;
+    transform: translateX(0);
+}
 
 /*---------------- Promotion Section End ----------------*/
 

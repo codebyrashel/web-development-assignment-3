@@ -1,72 +1,76 @@
-// Testimony Carousel Control - Java Start //
-
+// Unified DOMContentLoaded Event
 document.addEventListener('DOMContentLoaded', () => {
-  const prevButton = document.querySelector('.prev');
-  const nextButton = document.querySelector('.next');
+  // Carousel Controls
   const carousel = document.querySelector('#testimonial-carousel');
   const indicators = document.querySelectorAll('.indicator');
-  const testimonialItems = document.querySelectorAll('.testimonial-item');
+  const items = document.querySelectorAll('.testimonial-item');
   let currentIndex = 0;
 
-  function updateCarousel() {
-    const offset = -currentIndex * 100;
-    carousel.style.transform = `translateX(${offset}%)`;
+  const updateCarousel = () => {
+    carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+    indicators.forEach((el, i) => el.classList.toggle('active', i === currentIndex));
+  };
 
-    indicators.forEach((indicator, index) => {
-      if (index === currentIndex) {
-        indicator.classList.add('active');
-      } else {
-        indicator.classList.remove('active');
-      }
-    });
-  }
-
-  prevButton.addEventListener('click', () => {
-    currentIndex = (currentIndex === 0) ? testimonialItems.length - 1 : currentIndex - 1;
+  document.querySelector('.prev')?.addEventListener('click', () => {
+    currentIndex = (currentIndex === 0) ? items.length - 1 : currentIndex - 1;
     updateCarousel();
   });
 
-  nextButton.addEventListener('click', () => {
-    currentIndex = (currentIndex === testimonialItems.length - 1) ? 0 : currentIndex + 1;
+  document.querySelector('.next')?.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % items.length;
     updateCarousel();
   });
 
-  indicators.forEach((indicator, index) => {
-    indicator.addEventListener('click', () => {
-      currentIndex = index;
+  indicators.forEach((el, i) =>
+    el.addEventListener('click', () => {
+      currentIndex = i;
       updateCarousel();
-    });
-  });
+    })
+  );
 
   updateCarousel();
-});
 
-// Testimony Carousel Control - Java End //
+  // Mobile Navigation Toggle
+  document.getElementById("hamburger")?.addEventListener("click", () =>
+    document.getElementById("mobileNav")?.classList.add("open")
+  );
+  document.getElementById("closeNav")?.addEventListener("click", () =>
+    document.getElementById("mobileNav")?.classList.remove("open")
+  );
 
-
-// Mobile Nav Toggle Control - Java Start //
-
-document.addEventListener('DOMContentLoaded', function () {
-  const hamburger = document.getElementById("hamburger");
-  const mobileNav = document.getElementById("mobileNav");
-  const closeNav = document.getElementById("closeNav");
-
-  hamburger.addEventListener("click", () => {
-    mobileNav.classList.add("open");
+  // Dropdown Toggle
+  document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+      const menu = e.currentTarget.querySelector('.dropdown-menu');
+      if (menu) menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    });
   });
 
-  closeNav.addEventListener("click", () => {
-    mobileNav.classList.remove("open");
-  });
-});
+  // Animation Observer Setup
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      const el = entry.target;
+      const inView = entry.isIntersecting;
 
-// Mobile Nav Toggle Control - Java End //
+      const toggleClass = (condition, className) => {
+        if (condition) el.classList.toggle(className, inView);
+      };
 
+      const isEven = index % 2 === 0;
+      toggleClass(el.classList.contains('services-card-wrapper'), isEven ? 'animate-left' : 'animate-right');
+      toggleClass(el.classList.contains('promo-card-v2'), 'animate-left');
+      toggleClass(el === document.querySelector('.honeymoon-image'), 'animate-left');
+      toggleClass(el === document.querySelector('.booking-cards-wrapper'), 'animate-right');
+      toggleClass(el === document.querySelector('.promo-image-v2'), 'animate-right');
+    });
+  }, { threshold: 0.3 });
 
-// Handle dropdown toggle visibility
-document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-  toggle.addEventListener('click', function(e) {
-      const menu = e.target.closest('.dropdown-toggle').querySelector('.dropdown-menu');
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-  });
+  // Observe All Relevant Elements
+  [
+    ...document.querySelectorAll('.services-card-wrapper'),
+    document.querySelector('.honeymoon-image'),
+    document.querySelector('.booking-cards-wrapper'),
+    ...document.querySelectorAll('.promo-card-v2'),
+    document.querySelector('.promo-image-v2')
+  ].forEach(el => el && observer.observe(el));
 });
